@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Crop9</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="xuanze">Gallery</string>
+    <string name="fenxiang">Share</string>
+    <string name="author">Author:Aki Lee</string>
+    <string name="email">Email:\nlichenhui0102@163.com</string>
+    <string name="p_pic">Please select a picture</string>
+    <string name="all_picture">All Picture</string>
+    <string name="folder_all">All Images</string>
+    <string name="clear_data">Clear data</string>
+    <string name="preview">Preview</string>
+    <string name="msg_no_camera">No system camera found</string>
+    <string name="msg_amount_limit">Select images amount is limit</string>
+    <string name="title_activity_image_edit">ImageEditActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_image_crop">ImageCropActivity</string>
+    <string name="title_activity_init">InitActivity</string>
+</resources>

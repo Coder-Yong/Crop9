@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Crop9</string>
+    <string name="xuanze">选择图片</string>
+    <string name="fenxiang">分享</string>
+    <string name="author">作者:Aki Lee</string>
+    <string name="email">邮箱:\nlichenhui0102@163.com</string>
+    <string name="p_pic">请选择图片</string>
+    <string name="clear_data">清除数据</string>
+    <string name="all_picture">所有图片</string>
+    <string name="folder_all">所有图片</string>
+    <string name="preview">Preview</string>
+    <string name="msg_no_camera">没找到系统相机</string>
+    <string name="msg_amount_limit">Select images amount is limit</string>
+
+</resources>
