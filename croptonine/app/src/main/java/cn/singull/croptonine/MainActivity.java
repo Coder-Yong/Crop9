@@ -27,19 +27,19 @@ import me.nereo.multi_image_selector.MultiImageSelectorFragment;
 
 public class MainActivity extends AppCompatActivity implements MultiImageSelectorFragment.Callback {
     //从图片选择器返回
-    private static int REQUEST_IMAGE = 2;
+    public static int REQUEST_IMAGE = 2;
     //从图片裁剪返回
-    private static int REQUEST_CROP = 3;
+    public static int REQUEST_CROP = 3;
     //从模板编辑器返回
-    private static int REQUEST_TEMP = 4;
+    public static int REQUEST_TEMP = 4;
     //Intent将List传至其他对象时使用的字段
-    private static String INTENT_BEAN = "images_date";
+    public static String INTENT_BEAN = "images_date";
     //Intent将gridview选择时的position传至其他对象时使用的字段(-1时为所有)
-    private static String INTENT_POSITION = "image_position";
+    public static String INTENT_POSITION = "image_position";
     //Intent将选择的图片路径传至裁剪器时的字段
-    private static String INTENT_PATH = "image_path";
+    public static String INTENT_PATH = "image_path";
     //Intent将选择的图片裁剪后传回时的字段
-    private static String INTENT_BITMAP = "image_bitmap";
+    public static String INTENT_BITMAP = "image_bitmap";
     private SlidingDrawer slidingDrawer;
     private GridView gridView;
     //    返回选择图片
