@@ -4,30 +4,91 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="cn.singull.croptonine.MainActivity">
-
+    <ImageView
+        android:id="@+id/main_image_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/bg_default"/>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/bg_alpha"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <GridView
             android:id="@+id/main_gridview"
             android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_weight="4"
             android:horizontalSpacing="2dp"
-            android:verticalSpacing="2dp"
-            android:scrollbars="none"
             android:numColumns="3"
+            android:scrollbars="none"
+            android:verticalSpacing="2dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="4" />
- <LinearLayout
+            android:layout_weight="2" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/main_btn_frame"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@color/app_alpha_zero"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/main_frame_selector" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+</LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/main_btn_shared"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@color/app_alpha_zero"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/main_shared_selector" />
+        </LinearLayout>
     </LinearLayout>
 
     <SlidingDrawer
@@ -38,18 +99,21 @@
         android:content="@+id/content"
         android:handle="@+id/main_handle">
 
-        <Button
+        <ImageButton
             android:id="@+id/main_handle"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/app_white"
-            android:text="上滑设置图片"
-            android:textColor="@color/app_alpha_hlaf" />
+            android:layout_width="100dp"
+            android:layout_height="120dp"
+            android:background="@color/app_alpha_zero"
+            android:padding="10dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/main_gallery_selector" />
 
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/backgrond_white_have_lines"
+            android:paddingTop="10dp">
 
             <FrameLayout
                 android:id="@+id/main_frame"

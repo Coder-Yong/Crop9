@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SlidingDrawer;
@@ -22,6 +23,7 @@ import java.util.TimerTask;
 import cn.singull.adapter.GridViewAdapter;
 import cn.singull.bean.ImageBean;
 import cn.singull.helper.ToNineHelper;
+import cn.singull.utils.UIUtils;
 import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import me.nereo.multi_image_selector.MultiImageSelectorFragment;
 
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
     //Intent将选择的图片裁剪后传回时的字段
     public static String INTENT_BITMAP = "image_bitmap";
     private SlidingDrawer slidingDrawer;
+    private boolean firstOnStart = true;
     private GridView gridView;
     //    返回选择图片
     private ArrayList<String> resultList = new ArrayList<>();
@@ -63,19 +66,22 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
     @Override
     protected void onStart() {
         super.onStart();
-        final Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        slidingDrawer.animateOpen();
-                        timer.cancel();
-                    }
-                });
-            }
-        }, 1000, 1000);
+        if(firstOnStart){
+            final Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            slidingDrawer.animateOpen();
+                            timer.cancel();
+                        }
+                    });
+                }
+            }, 1000, 1000);
+            firstOnStart = false;
+        }
     }
 
     //加载相册
@@ -110,7 +116,10 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
     }
 
     private void initViewOpea() {
-
+        ViewGroup.LayoutParams params = slidingDrawer.getLayoutParams();
+        params.height = UIUtils.getScreenData(this,"height")*5/6;
+        System.out.print(params.height);
+        slidingDrawer.setLayoutParams(params);
     }
 
     private void initViewClick() {

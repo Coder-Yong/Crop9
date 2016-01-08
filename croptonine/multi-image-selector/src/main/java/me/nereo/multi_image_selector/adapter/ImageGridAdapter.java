@@ -171,7 +171,6 @@ public class ImageGridAdapter extends BaseAdapter {
     public long getItemId(int i) {
         return i;
     }
-
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
@@ -201,7 +200,6 @@ public class ImageGridAdapter extends BaseAdapter {
         if(lp.height != mItemSize){
             view.setLayoutParams(mItemLayoutParams);
         }
-
         return view;
     }
 

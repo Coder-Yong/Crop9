@@ -3,18 +3,25 @@
     android:orientation="vertical"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="20dp"/>
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        layout="@layout/cmp_customer_actionbar" />
-
     <FrameLayout
         android:id="@+id/image_grid"
         android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@drawable/backgrond_white_have_lines"
+        android:gravity="center">
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:padding="10dp"
+            android:background="#00000000"
+            android:scaleType="fitCenter"
+            android:src="@drawable/cancel_btn_selector"/>
+    </LinearLayout>
 </LinearLayout>

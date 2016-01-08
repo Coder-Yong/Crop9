@@ -33,7 +33,6 @@ public class MultiImageSelectorActivity extends FragmentActivity implements Mult
     public static final int MODE_MULTI = 1;
 
     private ArrayList<String> resultList = new ArrayList<>();
-    private Button mSubmitButton;
     private int mDefaultCount;
 
     @Override
@@ -67,28 +66,6 @@ public class MultiImageSelectorActivity extends FragmentActivity implements Mult
                 finish();
             }
         });
-
-        // 完成按钮
-        mSubmitButton = (Button) findViewById(R.id.commit);
-        if(resultList == null || resultList.size()<=0){
-            mSubmitButton.setText("完成");
-            mSubmitButton.setEnabled(false);
-        }else{
-            mSubmitButton.setText("完成("+resultList.size()+"/"+mDefaultCount+")");
-            mSubmitButton.setEnabled(true);
-        }
-        mSubmitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(resultList != null && resultList.size() >0){
-                    // 返回已选择的图片数据
-                    Intent data = new Intent();
-                    data.putStringArrayListExtra(EXTRA_RESULT, resultList);
-                    setResult(RESULT_OK, data);
-                    finish();
-                }
-            }
-        });
     }
 
     @Override
@@ -105,28 +82,11 @@ public class MultiImageSelectorActivity extends FragmentActivity implements Mult
         if(!resultList.contains(path)) {
             resultList.add(path);
         }
-        // 有图片之后，改变按钮状态
-        if(resultList.size() > 0){
-            mSubmitButton.setText("完成("+resultList.size()+"/"+mDefaultCount+")");
-            if(!mSubmitButton.isEnabled()){
-                mSubmitButton.setEnabled(true);
-            }
-        }
     }
 
     @Override
     public void onImageUnselected(String path) {
-        if(resultList.contains(path)){
-            resultList.remove(path);
-            mSubmitButton.setText("完成("+resultList.size()+"/"+mDefaultCount+")");
-        }else{
-            mSubmitButton.setText("完成("+resultList.size()+"/"+mDefaultCount+")");
-        }
-        // 当为选择图片时候的状态
-        if(resultList.size() == 0){
-            mSubmitButton.setText("完成");
-            mSubmitButton.setEnabled(false);
-        }
+
     }
 
     @Override
