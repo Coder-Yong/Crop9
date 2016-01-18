@@ -7,6 +7,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -22,7 +24,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cn.singull.bean.ImageBean;
 import cn.singull.utils.FileUtils;
+import me.nereo.multi_image_selector.bean.Image;
 
 /**
  * Created by xinou03 on 2016/1/7 0007.
@@ -35,40 +39,43 @@ public class ToNineHelper {
     public static final String NINE_FOLDER = SDCARD_PATH + File.separator
             + "CropToNine" + File.separator;
     // 裁剪后的9宫格存储路径
-    public static final String NINE_FOLDER_DATA = SDCARD_PATH + File.separator
-            + "CropToNine" + File.separator + "data" + File.separator;
+    public static final String NINE_FOLDER_DATA = NINE_FOLDER + "data" + File.separator;
 
     /**
      * 将bitmap裁成9份并保存
      *
      * @param bitmap 图片
      */
-    public static List<String> toNine(Bitmap bitmap) {
+    public static List<String> toNine(Context context, Bitmap bitmap) {
         // TODO Auto-generated method stub
         List<String> listPath = new ArrayList<>();
         String time = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
         int n = bitmap.getWidth() / 3;
+        int m = bitmap.getHeight() / 3;
         int num = 0;
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 num++;
                 int x = j * n;
-                int y = i * n;
-                Bitmap bitmap2 = Bitmap.createBitmap(bitmap, x, y, n, n);
+                int y = i * m;
+                Bitmap bitmap2 = Bitmap.createBitmap(bitmap, x, y, n, m);
                 // 图像保存到文件中,同时将路径存入集合
-                listPath.add(saveImage(bitmap2,time+"_"+num));
+                listPath.add(saveImage(context, bitmap2, time + "_" + num));
             }
         }
+        bitmap.recycle();
         return listPath;
     }
 
     /**
      * 保存图片
-     * @param b Bitmap
+     *
+     * @param context    上下文对象
+     * @param b          Bitmap
      * @param timeAndNum 文件的中间名，可使用当前时间
      * @return
      */
-    public static String saveImage(Bitmap b,String timeAndNum){
+    public static String saveImage(Context context, Bitmap b, String timeAndNum) {
         FileOutputStream foutput = null;
         File file = new File(NINE_FOLDER_DATA + "CropToNine_" + timeAndNum + ".ctn");
         FileUtils.addFile(file);
@@ -89,6 +96,99 @@ public class ToNineHelper {
         }
         return file.getAbsolutePath();
     }
+
+    public static Uri mergeImage(Context context, ImageBean bean, String path) {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.RGB_565;
+        FileOutputStream foutput = null;
+        Bitmap bitmap1 = null;
+        Bitmap bitmap2 = null;
+        Bitmap bitmap3 = null;
+        int frameId = bean.getFrameId();
+        String imagePath = bean.getImagePath();
+        int tempId = bean.getTempId();
+        String tempPath = bean.getTempPath();
+
+        File file = new File(path);
+        FileUtils.addFile(file);
+        if (frameId != 0) {
+            bitmap1 = BitmapFactory.decodeResource(context.getResources(), frameId);
+            bitmap2 = BitmapFactory.decodeFile(imagePath,opts);
+            bitmap3 = mergeBitmap(bitmap2, bitmap1);
+            bitmap1.recycle();
+            bitmap2.recycle();
+            System.gc();
+        } else {
+            bitmap3 = BitmapFactory.decodeFile(imagePath);
+        }
+        bitmap2 = bitmap3;
+        if (tempId != 0 || tempPath != null) {
+            if (tempId != 0) {
+                bitmap1 = BitmapFactory.decodeResource(context.getResources(), tempId);
+            } else if (tempPath != null) {
+                bitmap1 = BitmapFactory.decodeFile(tempPath,opts);
+            }
+            bitmap3 = mergeBitmap(bitmap1, bitmap2);
+            bitmap1.recycle();
+            bitmap2.recycle();
+            System.gc();
+        }
+        try {
+            foutput = new FileOutputStream(file);
+            bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, foutput);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != foutput) {
+                try {
+                    foutput.close();
+                    bitmap3.recycle();
+                    System.gc();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return Uri.fromFile(file);
+    }
+
+    /**
+     * 图片合并
+     *
+     * @param bit      第一个图片
+     * @param bitmapBg 第二个图片
+     * @return
+     */
+    public static Bitmap mergeBitmap(Bitmap bitmapBg, Bitmap bit) {
+        // 创建画板
+        Bitmap b = Bitmap.createBitmap(bitmapBg.getWidth(), bitmapBg.getHeight(), Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(b);
+        canvas.drawBitmap(bitmapBg, 0, 0, null);
+        bitmapBg.recycle();
+        Bitmap b2 = null;
+        if (b.getWidth() > b.getHeight()) {
+            Matrix matrix = new Matrix();
+            float scale = (float) b.getHeight() / (float) bit.getHeight();
+            matrix.postScale(scale, scale);
+            b2 = Bitmap.createBitmap(bit, 0, 0, bit.getWidth(), bit.getHeight(), matrix, true);
+        } else {
+            Matrix matrix = new Matrix();
+            float scale = (float) b.getWidth() / (float) bit.getWidth();
+            matrix.postScale(scale, scale);
+            b2 = Bitmap.createBitmap(bit, 0, 0, bit.getWidth(), bit.getHeight(), matrix, true);
+        }
+        // 绘制
+        int height = (Math.abs(b.getHeight()
+                - b2.getHeight())) / 2;
+        int width = (Math.abs(b.getWidth() - b2.getWidth())) / 2;
+        if (b.getWidth() > b.getHeight()) {
+            canvas.drawBitmap(b2, width, 0, null);
+        } else {
+            canvas.drawBitmap(b2, 0, height, null);
+        }
+        return b;
+    }
+
     /**
      * 通过URI取得绝对路径（兼容4.4以上）
      *

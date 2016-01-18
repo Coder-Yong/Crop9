@@ -42,6 +42,7 @@ import me.nereo.multi_image_selector.bean.Folder;
 import me.nereo.multi_image_selector.bean.Image;
 import me.nereo.multi_image_selector.utils.FileUtils;
 import me.nereo.multi_image_selector.utils.TimeUtils;
+import me.nereo.multi_image_selector.utils.UIUtils;
 
 /**
  * 图片选择Fragment
@@ -183,6 +184,13 @@ public class MultiImageSelectorFragment extends Fragment {
         });
 
         mGridView = (GridView) view.findViewById(R.id.grid);
+        try{
+            MultiImageSelectorActivity act = (MultiImageSelectorActivity) getActivity();
+            act.act_panduan = false;
+        }catch (Exception e){
+            mGridView.setPadding(0, 0, 0,UIUtils.dip2px(getActivity(),60f));
+            mTimeLineText.setPadding(0,UIUtils.dip2px(getActivity(),5f),0,UIUtils.dip2px(getActivity(),5f));
+        }
         mGridView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int state) {
@@ -482,6 +490,10 @@ public class MultiImageSelectorFragment extends Fragment {
                         String path = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[0]));
                         String name = data.getString(data.getColumnIndexOrThrow(IMAGE_PROJECTION[1]));
                         long dateTime = data.getLong(data.getColumnIndexOrThrow(IMAGE_PROJECTION[2]));
+                        File fi = new File(path);
+                        if(fi.getParentFile().getName().equals("CropToNine")){
+                            continue;
+                        }
                         Image image = new Image(path, name, dateTime);
                         images.add(image);
                         if( !hasFolderGened ) {

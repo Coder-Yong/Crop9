@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.util.List;
 
@@ -44,24 +46,27 @@ public class GridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        if(convertView == null){
+        if (convertView == null) {
             holder = new ViewHolder();
-            convertView = act.getLayoutInflater().inflate(R.layout.main_gridview_item,null);
+            convertView = act.getLayoutInflater().inflate(R.layout.main_gridview_item, null);
             holder.frameImage = (ImageView) convertView.findViewById(R.id.main_gridview_item_frame);
             holder.imageView = (ImageView) convertView.findViewById(R.id.main_gridview_item_image);
             convertView.setTag(holder);
-        }else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if(list.get(position).getFrameId()!=0){
-            holder.frameImage.setImageResource(list.get(position).getFrameId());
+        if (null != list.get(position).getImagePath()) {
+            Picasso.with(act).load(new File(list.get(position).getImagePath())).fit().into(holder.imageView);
         }
-        if(null != list.get(position).getImagePath()){
-            holder.imageView.setImageURI(Uri.fromFile(new File(list.get(position).getImagePath())));
+        if (0 != list.get(position).getFrameId()) {
+            Picasso.with(act).load(list.get(position).getFrameId()).fit().skipMemoryCache().into(holder.frameImage);
+        }else{
+            holder.frameImage.setImageResource(R.color.app_alpha_zero);
         }
         return convertView;
     }
-    class ViewHolder{
+
+    class ViewHolder {
         ImageView frameImage;
         ImageView imageView;
     }

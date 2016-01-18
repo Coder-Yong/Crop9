@@ -24,6 +24,8 @@ dependencies {
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.squareup.picasso:picasso:2.3.2'
+    compile 'com.github.bumptech.glide:glide:3.5.2'
     compile files('libs/renderscript-v8.jar')
     compile project(':multi-image-selector')
+    compile project(':crop_master')
 }

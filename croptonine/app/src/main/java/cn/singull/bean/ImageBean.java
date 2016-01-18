@@ -9,6 +9,7 @@ public class ImageBean implements Serializable {
     private int frameId;
     private String imagePath;
     private String tempPath;
+    private int tempId;
 
     public int getFrameId() {
         return frameId;
@@ -32,5 +33,13 @@ public class ImageBean implements Serializable {
 
     public void setTempPath(String tempPath) {
         this.tempPath = tempPath;
+    }
+
+    public int getTempId() {
+        return tempId;
+    }
+
+    public void setTempId(int tempId) {
+        this.tempId = tempId;
     }
 }

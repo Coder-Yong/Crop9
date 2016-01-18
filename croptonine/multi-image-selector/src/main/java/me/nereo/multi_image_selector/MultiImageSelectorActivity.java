@@ -34,6 +34,7 @@ public class MultiImageSelectorActivity extends FragmentActivity implements Mult
 
     private ArrayList<String> resultList = new ArrayList<>();
     private int mDefaultCount;
+    public boolean act_panduan = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,21 +59,20 @@ public class MultiImageSelectorActivity extends FragmentActivity implements Mult
                 .add(R.id.image_grid, Fragment.instantiate(this, MultiImageSelectorFragment.class.getName(), bundle))
                 .commit();
 
-        // 返回按钮
-        findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        });
+//        // 返回按钮
+//        findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setResult(RESULT_CANCELED);
+//                finish();
+//            }
+//        });
     }
 
     @Override
     public void onSingleImageSelected(String path) {
-        Intent data = new Intent();
         resultList.add(path);
-        data.putStringArrayListExtra(EXTRA_RESULT, resultList);
+        Intent data = getIntent().putStringArrayListExtra(EXTRA_RESULT, resultList);
         setResult(RESULT_OK, data);
         finish();
     }

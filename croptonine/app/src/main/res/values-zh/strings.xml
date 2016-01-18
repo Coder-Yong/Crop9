@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Crop9</string>
-    <string name="xuanze">选择图片</string>
-    <string name="fenxiang">分享</string>
-    <string name="author">作者:Aki Lee</string>
-    <string name="email">邮箱:\nlichenhui0102@163.com</string>
-    <string name="p_pic">请选择图片</string>
-    <string name="clear_data">清除数据</string>
-    <string name="all_picture">所有图片</string>
-    <string name="folder_all">所有图片</string>
-    <string name="preview">Preview</string>
-    <string name="msg_no_camera">没找到系统相机</string>
-    <string name="msg_amount_limit">Select images amount is limit</string>
+
+    <string name="main_gird_click">点击选择图片</string>
+    <string name="ok">确定</string>
+    <string name="clear">清除</string>
+    <string name="edit_mod_message">你挑选的模板将应用到</string>
+    <string name="edit_mod_current">当前方块</string>
+    <string name="edit_mod_all">所有方块</string>
+    <string name="shared_image_loading">图片生成中...</string>
+    <string name="shared_shared">点击此处分享</string>
+    <string name="back">返回</string>
+    <string name="shared_save">图片已保存至</string>
+    <string name="shared_text">我用Crop9制作了拼图，快来看看\n</string>
+    <string name="shared_puzzle">生成在线拼图小游戏</string>
+    <string name="shared_select">将图片分享到</string>
+
+    <string name="shared_wechat">朋友圈</string>
+    <string name="shared_weibo">微博</string>
+    <string name="shared_qzone">QQ空间</string>
+
+
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_image_edit">ImageEditActivity</string>
+    <string name="title_activity_image_crop">ImageCropActivity</string>
+    <string name="title_activity_init">InitActivity</string>
+    <string name="title_activity_share">ShareActivity</string>
+    <string name="title_activity_pager">预览</string>
 
 </resources>
