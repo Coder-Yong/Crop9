@@ -15,6 +15,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.util.List;
+
+import cn.singull.application.MyApplication;
 import cn.singull.bean.ImageBean;
 import cn.singull.croptonine.MainActivity;
 import cn.singull.croptonine.R;
@@ -46,28 +50,41 @@ public class FrameRecyclerAdapter extends RecyclerView.Adapter<FrameRecyclerAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         int id = frames[position][0];
-        Picasso.with(act).load(id).fit().into(holder.image);
-//        Glide.with(act).load(id).into(holder.image);
-//        holder.image.setImageResource(id);
-                holder.image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        for (int i=0;i<9;i++) {
-                            act.list.get(i).setFrameId(frames[position][i+1]);
-                        }
-                        act.adapter.notifyDataSetChanged();
+        File f = null;
+        if (MyApplication.appli.getFramePaths() != null) {
+            f = MyApplication.appli.getFramePaths().get(position).get(0);
+            Picasso.with(act).load(f).fit().into(holder.image);
+        } else {
+            Picasso.with(act).load(id).fit().into(holder.image);
+        }
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (MyApplication.appli.getFramePaths() != null) {
+                    for (int i = 0; i < 9; i++) {
+                        act.list.get(i).setFrameId(0);
+                        act.list.get(i).setFramePath(MyApplication.appli.getFramePaths().get(position).get(i+1).getAbsolutePath());
+                    }
+                } else {
+                    for (int i = 0; i < 9; i++) {
+                        act.list.get(i).setFramePath(null);
+                        act.list.get(i).setFrameId(frames[position][i + 1]);
+                    }
+                }
+                act.adapter.notifyDataSetChanged();
 //                act.imageView.setVisibility(View.VISIBLE);
 //                Picasso.with(act).load(frames[position]).fit().into(act.imageView);
 //                Glide.with(act).load(frames[position]).into(act.imageView);
-                    }
-                });
+            }
+        });
         holder.image.setBackgroundResource(R.mipmap.frame_background);
         holder.itemView.setTag(id);
     }
 
     @Override
     public int getItemCount() {
-        return frames.length;
+        return MyApplication.appli.getFramePaths() != null ? MyApplication.appli.getFramePaths().size() : frames.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

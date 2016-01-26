@@ -30,7 +30,10 @@ import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +57,7 @@ public class ImageEditActivity extends AppCompatActivity {
     private ImageView imageView, imageTemplate;
     private LinearLayout linearTemlpate;
     private int imageX = 0;
-    //数据对象
+    //    数据对象
     private ImageBean bean = null;
     //    模板数据
     private TemplateRecyclerAdapter adapter;
@@ -105,7 +108,7 @@ public class ImageEditActivity extends AppCompatActivity {
         }
         if (bean.getTempId() != 0) {
             setImageTemplate(bean.getTempId());
-        }else if(bean.getTempPath()!=null){
+        } else if (bean.getTempPath() != null) {
             setImageTemplate(bean.getTempPath());
         }
         ViewGroup.LayoutParams params2 = linearTemlpate.getLayoutParams();
@@ -209,7 +212,7 @@ public class ImageEditActivity extends AppCompatActivity {
         bean.setTempPath(null);
         bean.setTempId(resId);
         imageTemplate.setVisibility(View.VISIBLE);
-        Picasso.with(this).load(resId).resize(x,y).into(imageTemplate);
+        Picasso.with(this).load(resId).resize(x, y).into(imageTemplate);
 //        Glide.with(this).load(resId).into(imageTemplate);
     }
 
@@ -270,8 +273,7 @@ public class ImageEditActivity extends AppCompatActivity {
      */
     private void toCrop(String path, int type) {
         Uri source = Uri.fromFile(new File(path));
-        String time = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
-        File f = new File(ToNineHelper.NINE_FOLDER_DATA + "CropToNine_" + time + ".ctn");
+        File f = new File(ToNineHelper.NINE_FOLDER_DATA, "cropped.ctn");
         FileUtils.addFile(f);
 //        File f = new File(bean.getImagePath());
         Uri outputUri = Uri.fromFile(f);
@@ -286,8 +288,24 @@ public class ImageEditActivity extends AppCompatActivity {
      */
     private void resultCrop(Uri uri, int type) {
         if (type == MUTI_TYPE_IMAGE) {
-            imageView.setImageURI(uri);
-            bean.setImagePath(ToNineHelper.getImageAbsolutePath(this, uri));
+            String time = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+            File f = new File(ToNineHelper.NINE_FOLDER_DATA + "CropToNine_" + time + ".ctn");
+            FileUtils.addFile(f);
+            Bitmap bitmap = UIUtils.setDigree(ToNineHelper.getImageAbsolutePath(this, uri), 640, 640, Bitmap.Config.RGB_565);
+            OutputStream outputStream = null;
+            try {
+                outputStream = new FileOutputStream(f);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                bitmap.recycle();
+                outputStream.close();
+                Picasso.with(this).load(f).fit().skipMemoryCache().into(imageView);
+                bean.setImagePath(f.getPath());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.gc();
         }
     }
 
@@ -317,9 +335,9 @@ public class ImageEditActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(linearTemlpate.getVisibility() == View.VISIBLE){
+        if (linearTemlpate.getVisibility() == View.VISIBLE) {
             linearTemlpate.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             super.onBackPressed();
         }
     }

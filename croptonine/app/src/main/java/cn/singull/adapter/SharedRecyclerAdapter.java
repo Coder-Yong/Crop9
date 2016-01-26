@@ -16,15 +16,16 @@ import java.util.List;
 import cn.singull.bean.ShareBean;
 import cn.singull.croptonine.ImageEditActivity;
 import cn.singull.croptonine.R;
+import cn.singull.croptonine.ShareActivity;
 
 /**
  * Created by xinou03 on 2016/1/13 0013.
  */
 public class SharedRecyclerAdapter extends RecyclerView.Adapter<SharedRecyclerAdapter.ViewHolder> {
     private List<ShareBean> sharedList;
-    private Activity act;
+    private ShareActivity act;
 
-    public SharedRecyclerAdapter(List<ShareBean> list, ImageEditActivity act) {
+    public SharedRecyclerAdapter(List<ShareBean> list, ShareActivity act) {
         this.act = act;
         this.sharedList = list;
     }
@@ -40,7 +41,13 @@ public class SharedRecyclerAdapter extends RecyclerView.Adapter<SharedRecyclerAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Picasso.with(act).load(sharedList.get(position).getSharedImageId()).fit().skipMemoryCache().into(holder.image);
+        Picasso.with(act).load(sharedList.get(position).getSharedImageId()).skipMemoryCache().into(holder.image);
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                act.share(position);
+            }
+        });
         holder.text.setText(act.getResources().getString(sharedList.get(position).getSharedNameId()));
     }
 

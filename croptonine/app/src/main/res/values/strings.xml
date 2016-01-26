@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">Crop9</string>
+    <string name="app_name">玩图宝</string>
 
     <string name="main_gird_click">Click on a picture</string>
     <string name="ok">OK</string>
     <string name="clear">Clear</string>
+    <string name="more">More</string>
     <string name="edit_mod_message">You selected the template will be applied to</string>
     <string name="edit_mod_current">The current square</string>
     <string name="edit_mod_all">All square</string>
@@ -12,8 +13,9 @@
     <string name="back">Back</string>
     <string name="shared_save">Save image as</string>
     <string name="shared_select">share the pictures</string>
-    <string name="shared_text">I use Crop9 to make the puzzle, come and have a look</string>
+    <string name="shared_text">I use 玩图宝 to make the puzzle, come and have a look</string>
     <string name="shared_puzzle">Generate puzzle game</string>
+    <string name="shared_error">Your phone is not installed </string>
 
     <string name="shared_wechat">Moments</string>
     <string name="shared_weibo">Weibo</string>
@@ -21,11 +23,13 @@
     <string name="wechat_package">com.tencent.mm</string>
     <string name="weibo_package">com.sina.weibo</string>
     <string name="qzone_package">com.qzone</string>
+    <string name="init_data">Check For New Material...</string>
+    <string name="init_data_load">Load Material...</string>
 
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_image_edit">ImageEditActivity</string>
-    <string name="title_activity_image_crop">ImageCropActivity</string>
-    <string name="title_activity_init">InitActivity</string>
-    <string name="title_activity_share">ShareActivity</string>
+    <string name="title_activity_main">玩图宝</string>
+    <string name="title_activity_image_edit">玩图宝</string>
+    <string name="title_activity_image_crop">玩图宝</string>
+    <string name="title_activity_init">玩图宝</string>
+    <string name="title_activity_share">玩图宝</string>
     <string name="title_activity_pager">Preview</string>
 </resources>

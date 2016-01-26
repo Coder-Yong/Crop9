@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import cn.singull.bean.ImageBean;
 import cn.singull.utils.FileUtils;
+import cn.singull.utils.UIUtils;
 import me.nereo.multi_image_selector.bean.Image;
 
 /**
@@ -64,6 +66,7 @@ public class ToNineHelper {
             }
         }
         bitmap.recycle();
+        System.gc();
         return listPath;
     }
 
@@ -105,6 +108,7 @@ public class ToNineHelper {
         Bitmap bitmap2 = null;
         Bitmap bitmap3 = null;
         int frameId = bean.getFrameId();
+        String framePath = bean.getFramePath();
         String imagePath = bean.getImagePath();
         int tempId = bean.getTempId();
         String tempPath = bean.getTempPath();
@@ -113,7 +117,14 @@ public class ToNineHelper {
         FileUtils.addFile(file);
         if (frameId != 0) {
             bitmap1 = BitmapFactory.decodeResource(context.getResources(), frameId);
-            bitmap2 = BitmapFactory.decodeFile(imagePath,opts);
+            bitmap2 = UIUtils.setDigree(imagePath,640,640, Bitmap.Config.RGB_565);
+            bitmap3 = mergeBitmap(bitmap2, bitmap1);
+            bitmap1.recycle();
+            bitmap2.recycle();
+            System.gc();
+        }else if(framePath!=null){
+            bitmap1 = BitmapFactory.decodeFile(framePath);
+            bitmap2 = UIUtils.setDigree(imagePath, 640, 640, Bitmap.Config.RGB_565);
             bitmap3 = mergeBitmap(bitmap2, bitmap1);
             bitmap1.recycle();
             bitmap2.recycle();
@@ -126,7 +137,7 @@ public class ToNineHelper {
             if (tempId != 0) {
                 bitmap1 = BitmapFactory.decodeResource(context.getResources(), tempId);
             } else if (tempPath != null) {
-                bitmap1 = BitmapFactory.decodeFile(tempPath,opts);
+                bitmap1 = UIUtils.setDigree(imagePath, 640, 640, Bitmap.Config.RGB_565);
             }
             bitmap3 = mergeBitmap(bitmap1, bitmap2);
             bitmap1.recycle();
@@ -206,6 +217,21 @@ public class ToNineHelper {
             return getImageAbsolutePath44(act, uri);
         } else {
             return getImageAbsolutePath0(act, uri);
+        }
+    }
+
+    /**
+     * 通过包名判断应用是否存在
+     * @param context
+     * @param p
+     * @return
+     */
+    public static boolean checkPackage(Context context, String p) {
+        try {
+            context.getPackageManager().getApplicationInfo(p, PackageManager.GET_UNINSTALLED_PACKAGES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 

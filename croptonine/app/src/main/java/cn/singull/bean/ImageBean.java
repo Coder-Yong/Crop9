@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class ImageBean implements Serializable {
     private int frameId;
+    private String framePath;
     private String imagePath;
     private String tempPath;
     private int tempId;
@@ -41,5 +42,13 @@ public class ImageBean implements Serializable {
 
     public void setTempId(int tempId) {
         this.tempId = tempId;
+    }
+
+    public String getFramePath() {
+        return framePath;
+    }
+
+    public void setFramePath(String framePath) {
+        this.framePath = framePath;
     }
 }

@@ -110,7 +110,8 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
                         .getParcelableExtra(Intent.EXTRA_STREAM);
                 if (imageUri != null) {
                     // Update UI to reflect image being shared
-                    toCrop(ToNineHelper.getImageAbsolutePath(this, imageUri), -1);
+                    firstOnStart = false;
+                    toCrop(imageUri, -1);
                 }
             }
         }
@@ -254,6 +255,12 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
         } else {
             long l = System.currentTimeMillis();
             if (l - millTime < 1800) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FileUtils.deleteFolderFile(ToNineHelper.NINE_FOLDER_DATA, false);
+                    }
+                }).start();
                 super.onBackPressed();
             } else {
                 UIUtils.toast(this, "再点击一次退出");
@@ -299,7 +306,14 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
      */
     private void toCrop(String path, int position) {
         Uri source = Uri.fromFile(new File(path));
-        File f = new File(ToNineHelper.NINE_FOLDER_DATA, "cropped.ctn");
+        File f = new File(ToNineHelper.NINE_FOLDER_DATA, "cropped" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".ctn");
+        FileUtils.addFile(f);
+        Uri outputUri = Uri.fromFile(f);
+        new Crop(source).output(outputUri).asSquare().putExtra(MainActivity.INTENT_POSITION, position).start(this);
+    }
+
+    private void toCrop(Uri source, int position) {
+        File f = new File(ToNineHelper.NINE_FOLDER_DATA, "cropped" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".ctn");
         FileUtils.addFile(f);
         Uri outputUri = Uri.fromFile(f);
         new Crop(source).output(outputUri).asSquare().putExtra(MainActivity.INTENT_POSITION, position).start(this);
@@ -312,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
      * @param position
      */
     private void resultCrop(Uri uri, int position) {
-        setBackground(BitmapFactory.decodeFile(ToNineHelper.getImageAbsolutePath(this, uri)));
+        setBackground(UIUtils.setDigree(ToNineHelper.getImageAbsolutePath(this, uri), 640, 640, Bitmap.Config.ARGB_8888));
         if (position == -1) {
             List<String> l = toCropNine(ToNineHelper.getImageAbsolutePath(this, uri));
             for (int i = 0; i < l.size(); i++) {
@@ -332,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
      * @return 返回裁剪完成的文件路径
      */
     private List<String> toCropNine(String path) {
-        return ToNineHelper.toNine(this, UIUtils.setDigree(path));
+        return ToNineHelper.toNine(this, UIUtils.setDigree(path, 1920, 1920, Bitmap.Config.RGB_565));
     }
 
     @Override
@@ -377,6 +391,9 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
                 if (bean == null) {
                     return;
                 }
+                if (!list.get(position).getImagePath().equals(bean.getImagePath())) {
+                    setBackground(UIUtils.setDigree(bean.getImagePath(), 640, 640, Bitmap.Config.ARGB_8888));
+                }
                 if (flag) {
                     for (ImageBean b : list) {
                         b.setTempPath(bean.getTempPath());
@@ -413,9 +430,12 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
             @Override
             public void run() {
                 // TODO Auto-generated method stub
-                bitmapBg.add(BlurUtils.Blur(MainActivity.this, bitmap, 25f));
-                if (bitmap != null)
+                Bitmap b = BlurUtils.Blur(MainActivity.this, bitmap, 25f);
+                bitmapBg.add(b);
+                if (bitmap != null) {
                     bitmap.recycle();
+                    System.gc();
+                }
                 if (bitmapBg.size() == 1) {
                     runOnUiThread(new Runnable() {
 
@@ -475,6 +495,7 @@ public class MainActivity extends AppCompatActivity implements MultiImageSelecto
                 if (bitmapBg.size() != 1) {
                     bitmapBg.get(0).recycle();
                     bitmapBg.remove(0);
+                    System.gc();
                 }
             }
 

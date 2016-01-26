@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.media.ExifInterface;
+import android.text.ClipboardManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,6 +27,17 @@ public class UIUtils {
      */
     public static void toast(Context context, String str) {
         Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 复制内容到剪贴板
+     *
+     * @param str     复制内容
+     * @param context
+     */
+    public static void copyString(String str, Context context) {
+        ClipboardManager cmb = (ClipboardManager) context.getSystemService(context.CLIPBOARD_SERVICE);
+        cmb.setText(str);
     }
 
     /**
@@ -79,11 +91,11 @@ public class UIUtils {
     }
 
     /**
-     * 修改图片方向
+     * 修改图片方向,压缩
      */
-    public static Bitmap setDigree(String path) {
+    public static Bitmap setDigree(String path, int x, int y, Bitmap.Config config) {
         // TODO Auto-generated method stub
-        Bitmap bitmap = bitmapSample(path,1920,1920);
+        Bitmap bitmap = bitmapSample(path, x, y ,config);
         ExifInterface exif = null;// 获取照片信息
         int digree = 0;// 相机角度
         try {
@@ -121,24 +133,28 @@ public class UIUtils {
 
     /**
      * 图片压缩
+     *
      * @param path
      * @param width
      * @param height
      * @return
      */
-    public static Bitmap bitmapSample(String path,int width,int height){
-        int count = width>height?height:width;
+    public static Bitmap bitmapSample(String path, int width, int height, Bitmap.Config config) {
+        int count = width > height ? height : width;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
         Bitmap bitmap = null;
         if (options.outWidth > count) {
             options.inJustDecodeBounds = false;
+            options.inPreferredConfig = config;
             options.inSampleSize = options.outWidth / count;
             Log.i("setDigree:inSample", options.inSampleSize + "");
             bitmap = BitmapFactory.decodeFile(path, options);
         } else {
-            bitmap = BitmapFactory.decodeFile(path);
+            options.inJustDecodeBounds = false;
+            options.inPreferredConfig = config;
+            bitmap = BitmapFactory.decodeFile(path, options);
         }
         return bitmap;
     }

@@ -16,6 +16,9 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+
+import cn.singull.application.MyApplication;
 import cn.singull.bean.ImageBean;
 import cn.singull.croptonine.ImageEditActivity;
 import cn.singull.croptonine.R;
@@ -47,7 +50,12 @@ public class TemplateRecyclerAdapter extends RecyclerView.Adapter<TemplateRecycl
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         int id = templates[position];
-        Picasso.with(act).load(id).resize(0, 300).into(holder.image);
+        if (MyApplication.appli.getTemplatePaths() != null) {
+            File f = MyApplication.appli.getTemplatePaths().get(position);
+            Picasso.with(act).load(f).resize(0, 300).into(holder.image);
+        } else {
+            Picasso.with(act).load(id).resize(0, 300).into(holder.image);
+        }
 //        Glide.with(act).load(id).into(holder.image);
         if (position == 0) {
             holder.text.setVisibility(View.VISIBLE);
@@ -60,7 +68,11 @@ public class TemplateRecyclerAdapter extends RecyclerView.Adapter<TemplateRecycl
                 if (position == 0) {
                     act.toMultiImageSelector(ImageEditActivity.MUTI_TYPE_TEMP);
                 } else {
-                    act.setImageTemplate(templates[position]);
+                    if (MyApplication.appli.getTemplatePaths() != null) {
+                        act.setImageTemplate(MyApplication.appli.getTemplatePaths().get(position).getAbsolutePath());
+                    }else{
+                        act.setImageTemplate(templates[position]);
+                    }
                 }
 
             }
@@ -70,7 +82,7 @@ public class TemplateRecyclerAdapter extends RecyclerView.Adapter<TemplateRecycl
 
     @Override
     public int getItemCount() {
-        return templates.length;
+        return MyApplication.appli.getTemplatePaths() != null ? MyApplication.appli.getTemplatePaths().size() : templates.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

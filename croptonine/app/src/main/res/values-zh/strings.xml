@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Crop9</string>
+    <string name="app_name">玩图宝</string>
 
     <string name="main_gird_click">点击选择图片</string>
     <string name="ok">确定</string>
     <string name="clear">清除</string>
+    <string name="more">更多</string>
     <string name="edit_mod_message">你挑选的模板将应用到</string>
     <string name="edit_mod_current">当前方块</string>
     <string name="edit_mod_all">所有方块</string>
@@ -12,20 +13,23 @@
     <string name="shared_shared">点击此处分享</string>
     <string name="back">返回</string>
     <string name="shared_save">图片已保存至</string>
-    <string name="shared_text">我用Crop9制作了拼图，快来看看\n</string>
+    <string name="shared_text">我用玩图宝制作了拼图，快来看看\n</string>
     <string name="shared_puzzle">生成在线拼图小游戏</string>
     <string name="shared_select">将图片分享到</string>
+    <string name="shared_error">你的手机没有安装</string>
 
     <string name="shared_wechat">朋友圈</string>
     <string name="shared_weibo">微博</string>
     <string name="shared_qzone">QQ空间</string>
+    <string name="init_data">检查是否有新素材...</string>
+    <string name="init_data_load">素材下载中...</string>
 
 
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_image_edit">ImageEditActivity</string>
-    <string name="title_activity_image_crop">ImageCropActivity</string>
-    <string name="title_activity_init">InitActivity</string>
-    <string name="title_activity_share">ShareActivity</string>
+    <string name="title_activity_main">玩图宝</string>
+    <string name="title_activity_image_edit">玩图宝</string>
+    <string name="title_activity_image_crop">玩图宝</string>
+    <string name="title_activity_init">玩图宝</string>
+    <string name="title_activity_share">玩图宝</string>
     <string name="title_activity_pager">预览</string>
 
 </resources>
